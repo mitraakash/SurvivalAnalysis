@@ -1,0 +1,212 @@
+---
+title: "FDA Dec Update"
+author: "Akash Mitra"
+date: "1/2/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+
+rm(list=ls(all=TRUE))
+library(fda)
+library(fda.usc)
+library(survival)
+library(readxl)
+########### Gcross_tumor_vs_cytotoxic CD8
+
+
+
+dat <- read_excel("dataset.xlsx", col_names = T)
+
+#dat <- subset(dat, !duplicated(time))
+#df <- dat[,-c(1,2,3,4,5,6)]
+
+
+#df <- df[complete.cases(df),]
+df2 = fdata(dat)
+
+par(mfrow=c(1,3))
+plot(df2)
+plot((pc<-create.pc.basis(df2,l=1:2))[[1]],main="cdf, 2 FPC")
+pc<-fdata2pc(df2,ncomp=3)
+#plot(pc2$rotation,main="3 FPC basis",xlab="distance")
+summary(pc)
+
+
+#write.csv(pc$u, "/Users/AkashMitra/Documents/Rotation1-ARao/FDA Analysis/Gcross_tumor_vs_cytotoxic CD8_AllPatientsCombined_FPCA2Loaded.csv")
+
+
+dat <- subset(dat, !duplicated(time))
+dat <- cbind(pc$u[,1:3], dat)
+
+cph1 = coxph(Surv(time, status) ~ dat$`1`+dat$`2`+dat$`3`, data = dat)
+summary (cph1)
+
+#baseline<-basehaz(cph1)
+
+#plot(baseline$time, baseline$hazard, type='l',main="Hazard rates") 
+
+#lines(baseline$time, exp(1.9248)*baseline$hazard, col="green") 
+
+#lines(baseline$time, exp(-0.1868)*baseline$hazard, col="blue") 
+
+#lines(baseline$time, exp(-0.3976)*baseline$hazard, col="red") 
+
+
+```
+
+```{r}
+
+#########  Gcross_tumor_vs_T reg Foxp3
+
+
+dat1 <- read.csv("/Users/AkashMitra/Documents/Rotation1-ARao/FDA Analysis/Gcross_tumor_vs_T reg Foxp3_OverallUpdated.csv", header = T)
+
+dat1 <- subset(dat1, !duplicated(time))
+
+df <- dat1[,-c(1,2,3,4,5,6)]
+
+
+df2=fdata(df)
+
+pc2 = fdata2pc(df2, ncomp=3)
+#plot(pc2$rotation, main="3 FPC basis", xlab = "distance")
+summary(pc2)
+
+
+#write.csv(pc2$u, "/Users/AkashMitra/Documents/Gcross_tumor_vs_T reg Foxp3_OverallUpdated_FPCA2Loaded.csv")
+
+
+dat1 <- read.csv("/Users/AkashMitra/Documents/Rotation1-ARao/FDA Analysis/Gcross_tumor_vs_T reg Foxp3_OverallUpdated.csv", header=T)
+
+dat1 <- subset(dat1, !duplicated(time))
+
+dat1 <- cbind(dat1, pc2$u[,1:3])
+
+cph1 = coxph(Surv(time, status) ~ dat1$`1`+dat1$`2`+dat1$`3`, data = dat1)
+
+summary (cph1)
+
+#baseline<-basehaz(cph1)
+
+#plot(baseline$time, baseline$hazard, type='l',main="Hazard rates") 
+
+#lines(baseline$time, exp(1.141)*baseline$hazard, col="green") 
+
+#lines(baseline$time, exp(1.213)*baseline$hazard, col="blue") 
+
+#lines(baseline$time, exp(2.114)*baseline$hazard, col="red") 
+
+
+```
+
+```{r}
+
+######Gcross_tumor_vs_helper CD4
+
+
+dat2 <- read.csv("/Users/AkashMitra/Documents/Rotation1-ARao/FDA Analysis/Gcross_tumor_vs_helper CD4_overallUpdated.csv", header = T)
+
+dat2 <- subset(dat2, !duplicated(time))
+
+df <- dat2[,-c(1,2,3,4,5,6)]
+
+
+df2=fdata(df)
+
+
+
+
+pc3 = fdata2pc(df2, ncomp=3)
+#plot(pc3$rotation, main="3 FPC basis", xlab = "distance")
+summary(pc3)
+
+pcdf <- as.matrix(pc3)
+#write.csv(pc3$u, "/Users/AkashMitra/Documents/Gcross_tumor_vs_helper CD4_overallUpdated_FPCA2Loaded.csv")
+
+
+dat2 <- read.csv("//Users/AkashMitra/Documents/Rotation1-ARao/FDA Analysis/Gcross_tumor_vs_helper CD4_overallUpdated.csv", header=T)
+
+dat2 <- subset(dat2, !duplicated(time))
+
+dat2 <- cbind(dat2, pc3$u[,1:3])
+
+cph1 = coxph(Surv(time, status) ~ dat2$`1`+dat2$`2`+dat2$`3`, data = dat2)
+
+summary (cph1)
+
+#baseline<-basehaz(cph1)
+
+#plot(baseline$time, baseline$hazard, type='l',main="Hazard rates") 
+
+#lines(baseline$time, exp(11.5128)*baseline$hazard, col="green") 
+
+#lines(baseline$time, exp(3.0198)*baseline$hazard, col="blue") 
+
+#lines(baseline$time, exp(0.7106)*baseline$hazard, col="red") 
+
+
+```
+
+
+```{r}
+
+#####Gcross_tumor_vs_macrophage CD68
+
+
+dat3 = read.csv("/Users/AkashMitra/Documents/Rotation1-ARao/FDA Analysis/Gcross_tumor_vs_macrophage CD68_OverallUpdated.csv", header=T)
+
+dat3 <- subset(dat3, !duplicated(time))
+
+df <- dat3[,-c(1,2,3,4,5,6)]
+
+
+df2=fdata(df)
+
+
+#pc <- create.pc.basis(df2,l=1:2)[[1]], main= "cdf, 2 FPC"
+pc4 <- fdata2pc(df2, ncomp=3)
+#plot(pc4$rotation, main="3 FPC basis", xlab = "distance")
+summary(pc4)
+
+
+pcdf <- as.matrix(pc4)
+#write.csv(pc4$u, "/Users/AkashMitra/Documents/Gcross_tumor_vs_macrophage CD68_overall_LoadedPC3.csv")
+
+
+dat3 <- read.csv("/Users/AkashMitra/Documents/Rotation1-ARao/FDA Analysis/Gcross_tumor_vs_macrophage CD68_OverallUpdated.csv", header=T)
+
+dat3 <- subset(dat3, !duplicated(time))
+
+dat3 <- cbind(dat3, pc4$u[,1:3])
+
+cph1 = coxph(Surv(time, status) ~ dat3$`1`+dat3$`2`+dat3$`3`, data = dat3)
+
+summary (cph1)
+
+#baseline<-basehaz(cph1)
+
+#plot(baseline$time, baseline$hazard, type='l',main="Hazard rates") 
+
+#lines(baseline$time, exp(1.3175)*baseline$hazard, col="green") 
+
+#lines(baseline$time, exp(-1.0429)*baseline$hazard, col="blue") 
+
+#lines(baseline$time, exp(-0.6607)*baseline$hazard, col="red") 
+
+```
+
+```{r}
+
+### Combining PCA data from all patients from all cell types
+newdf <- cbind.data.frame(subset(dat[1:110, c(1:2)]),subset(dat1[, c(208:209)]),subset(dat2[1:110, c(208:209)]), subset(dat3[1:110, c(208:209)]),subset(dat1[, c(2:3)]))
+
+colnames(newdf) <- c("a","b","c","d","e","f","g","h","time","status") 
+
+cphfinal = coxph(Surv(time, status) ~ newdf$a+newdf$b+newdf$c+newdf$d+newdf$e+newdf$f+newdf$g+newdf$h, data = newdf)
+
+###Finding Cox Regressional Hazard for combined data
+summary (cphfinal)
+
+```
+
